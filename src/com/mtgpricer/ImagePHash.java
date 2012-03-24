@@ -3,6 +3,7 @@ package com.mtgpricer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 /*
  * pHash-like image hash. 
  * Author: Elliot Shepherd (elliot@jarofworms.com
@@ -37,8 +38,8 @@ public class ImagePHash {
 	}
 	
 	// Returns a 'binary string' (like. 001010111011100010) which is easy to do a hamming distance on. 
-	public String getHash(String is) throws Exception {
-		Bitmap img = BitmapFactory.decodeFile(is);
+	public String getHash(Bitmap is) throws Exception {
+		Bitmap img = is;
 		
 		/* 1. Reduce size. 
 		 * Like Average Hash, pHash starts with a small image. 

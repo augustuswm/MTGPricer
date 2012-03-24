@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -23,69 +24,55 @@ public class MTGPricerActivity extends Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	Date timer = new Date();
-    	
         super.onCreate(savedInstanceState);    
         
         setContentView(R.layout.main);
         
         ImagePHash hash = new ImagePHash();
 		TextView hashView = (TextView) findViewById(R.id.Hash);
-                
+		TextView hashView2 = (TextView) findViewById(R.id.Hash2);
+		TextView distance = (TextView) findViewById(R.id.distance);
         ImageView image = (ImageView) findViewById(R.id.cardImage);
+        ImageView image2 = (ImageView) findViewById(R.id.rotated);
         Bitmap bMap = BitmapFactory.decodeFile("/sdcard/download/Image.jpg");
-        //bMap = hash.resize(bMap, 32, 32);
-        //image.setImageBitmap(bMap);
         
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(); 
-        bMap.compress(CompressFormat.JPEG, 100, bos); 
-        byte[] bitmapdata = bos.toByteArray();
+        double cardHeight = 9.525; // cm, equiv to 3.75 inches
+        double cardWidth = 6.0325; // cm, equiv to 2.375 inches
         
-        bMap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+        double sizeRatio = bMap.getHeight() / cardHeight;
         
-        //image.setImageBitmap(bMap);
+        int topOffset = (int) Math.ceil(1.11125 * sizeRatio);
+        int leftOffset = (int) Math.ceil(0.47625 * sizeRatio);
+        int artHeight = (int) Math.ceil(3.81 * sizeRatio);
+        int artWidth = (int) Math.ceil(5.23875 * sizeRatio);
         
-        hashView.setText(Integer.toString(bMap.getHeight()));
+        bMap = Bitmap.createBitmap(bMap, leftOffset, topOffset, artWidth, artHeight);
         
-        Mat canny = new Mat(320, 240, CvType.CV_8UC1);
-        canny.put(0, 0, bitmapdata);
-        
-        try {
-        	Utils.matToBitmap(canny, bMap);
-            image.setImageBitmap(bMap);
-        } catch (Exception e) {
-			Log.d("MTGPricer", "Failed hash");
-			e.printStackTrace();        	
-        }
-
-        /*Mat mRgba;
-        Mat mGraySubmat;
-        Mat mIntermediateMat;
-        
-        mGraySubmat = canny.submat(0, bMap.getHeight(), 0, bMap.getWidth());
-
-        mRgba = new Mat();
-        mIntermediateMat = new Mat();
-        
-        Imgproc.Canny(mGraySubmat, mIntermediateMat, 80, 100);
-        Imgproc.cvtColor(mIntermediateMat, mRgba, Imgproc.COLOR_GRAY2BGRA, 4);
-        
-        Bitmap bmp = Bitmap.createBitmap(bMap.getHeight(), bMap.getWidth(), Bitmap.Config.ARGB_8888);
-
-        if (Utils.matToBitmap(canny, bmp))
-            image.setImageBitmap(bmp);       
+        image.setImageBitmap(bMap);
         
         try {
-			String hashcode = hash.getHash("/sdcard/download/Image.jpg");
-			//hashView.setText(hashcode);
+			hashView.setText(hash.getHash(bMap));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			Log.d("MTGPricer", "Failed hash");
 			e.printStackTrace();
-		}*/
+		}
         
-        //CameraPreview window = new CameraPreview(this);
-        //setContentView(window);
+        Matrix m = new Matrix();
+        m.postScale(32, 32);
+        m.postRotate(45);
+        
+        Bitmap art = Bitmap.createScaledBitmap(bMap, 32, 32, false);
+        image2.setImageBitmap(art);
+        
+        try {
+			hashView2.setText(hash.getHash(art));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+            
+        distance.setText(Integer.toString(HammingDistance.distance(hashView.getText(), hashView2.getText())));
+        
     }
 
 }

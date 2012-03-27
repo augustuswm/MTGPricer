@@ -1,17 +1,13 @@
 package com.mtgpricer;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 /*
  * pHash-like image hash. 
  * Author: Elliot Shepherd (elliot@jarofworms.com
  * Based On: http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
  */
 public class ImagePHash {
-	public static void main (String[] argv) {
-	}
 
 	private int size = 32;
 	private int smallerSize = 8;
@@ -92,7 +88,7 @@ public class ImagePHash {
 		}
 		total -= dctVals[0][0];
 		
-		double avg = total / (double) ((smallerSize * smallerSize) - 1);
+		double avg = total / ((smallerSize * smallerSize) - 1);
 	
 		/* 6. Further reduce the DCT. 
 		 * This is the magic step. Set the 64 hash bits to 0 or 1 
@@ -116,25 +112,17 @@ public class ImagePHash {
 		
 		return hash;
 	}
+	
 	// Android
 	public Bitmap resize(Bitmap image, int width, int height) {
-		Bitmap resizedImage = Bitmap.createBitmap(image, 0, 0, width, height);
+		//Bitmap resizedImage = Bitmap.createBitmap(image, 0, 0, width, height);
+		Bitmap resizedImage = Bitmap.createScaledBitmap(image, 32, 32, false);
 		//Graphics2D g = resizedImage.createGraphics();
 		//g.drawImage(image, 0, 0, width, height, null);
 		//g.dispose();
 		return resizedImage;
 	}
 	
-	// Java.awt
-	/*private BufferedImage resize(BufferedImage image, int width,	int height) {
-		BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = resizedImage.createGraphics();
-		g.drawImage(image, 0, 0, width, height, null);
-		g.dispose();
-		return resizedImage;
-	}*/
-	
-	// NEEDS TO BE IMPLEMENTED
 	// Android
 	private Bitmap toGrayscale(Bitmap img) {        
 	    int width, height, pixel;
@@ -161,23 +149,10 @@ public class ImagePHash {
 	    return img;
 	}
 	
-	// Java.awt
-	/*private ColorConvertOp colorConvert = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-
-	private BufferedImage grayscale(BufferedImage img) {
-        colorConvert.filter(img, img);
-        return img;
-    }*/
-	
 	// Android
 	private static int getBlue(Bitmap img, int x, int y) {
 		return Color.blue(img.getPixel(x, y));
 	}
-	
-	// Java.awt
-	/*private static int getBlue(BufferedImage img, int x, int y) {
-		return (img.getRGB(x, y)) & 0xff;
-	}*/
 	
 	// DCT function stolen from http://stackoverflow.com/questions/4240490/problems-with-dct-and-idct-algorithm-in-java
 

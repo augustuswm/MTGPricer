@@ -6,22 +6,39 @@ import android.graphics.BitmapFactory;
 public class Card {
 
 	private CardDimensions dim;
-	private Bitmap cardArt;
+	private Bitmap card, cardArt;
 	private ImagePHash hasher;
 	private String hash;
 	
 	public Card (Bitmap card) {
         
-        dim = new CardDimensions(card, true);
+		this.card = card;
+        dim = new CardDimensions(card, false);
         cardArt = Bitmap.createBitmap(card, dim.leftOffset(), dim.topOffset(), dim.artWidth(), dim.artHeight());
         hasher = new ImagePHash();
         
         try {
-			hash = hasher.getHash(card);
+			hash = hasher.bmv_hash(cardArt);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         
+	}
+	
+	public Bitmap getCard() {
+		return this.card;
+	}
+	
+	public Bitmap getCardArt() {
+		return this.cardArt;
+	}
+	
+	public Bitmap getCardArtGray() {
+		return this.hasher.toGrayscale(this.cardArt);
+	}
+	
+	public String getHash() {
+		return this.hash;
 	}
     
     public String convertStreamToString(java.io.InputStream is) {

@@ -1,7 +1,10 @@
 package com.mtgpricer;
 
+import java.util.Arrays;
+
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 /*
  * pHash-like image hash. 
  * Author: Elliot Shepherd (elliot@jarofworms.com
@@ -33,6 +36,48 @@ public class ImagePHash {
 		return counter;
 	}
 	
+	public String bmv_hash(Bitmap is) throws Exception {
+		int dims = 32;
+		int blocks = dims / 4 - 1;
+		int blockMean;
+		int[] means = new int[(int) Math.pow(blocks, 2)];
+		int c = 0;
+		Bitmap img = is;
+		
+		img = toGrayscale(resize(img, dims, dims));
+		
+		for (int i = 0; i < blocks; i++) {
+			for (int j = 0; j < blocks; j++) {
+				//Log.d("Cooords", Integer.toString(i) + "," + Integer.toString(j));
+				blockMean = 0;
+				for (int m = 0; m < 8; m++) {
+					for (int n = 0; n < 8; n++) {
+						//Log.d("Coords",Integer.toString(i * 4 + m) + "," + Integer.toString(j * 4 + n));
+						blockMean += img.getPixel(i * 4 + m, j * 4 + n);
+					}
+				}
+				
+				means[c++] = blockMean / blocks;
+			}
+		}
+		
+		Log.d("Hash", "Ran through image");
+		
+		int[] sorted = Arrays.copyOf(means, dims);
+		Arrays.sort(sorted);
+		int median = sorted[(int) (sorted.length / 2)];
+		
+		String result = "";
+		for (int i = 0; i < means.length; i++) {
+			if (means[i] < median)
+				result += "0";
+			else
+				result += "1";
+		}
+		
+		return result;
+	}
+	
 	// Returns a 'binary string' (like. 001010111011100010) which is easy to do a hamming distance on. 
 	public String getHash(Bitmap is) throws Exception {
 		Bitmap img = is;
@@ -43,13 +88,13 @@ public class ImagePHash {
 		 * This is really done to simplify the DCT computation and not 
 		 * because it is needed to reduce the high frequencies.
 		 */
-		img = resize(img, smallerSize, smallerSize);
+		img = resize(img, size, size);
 		
 		/* 2. Reduce color. 
 		 * The image is reduced to a grayscale just to further simplify 
 		 * the number of computations.
 		 */
-		img = toGrayscale(img);
+		//img = toGrayscale(img);
 		
 		double[][] vals = new double[size][size];
 		
@@ -116,7 +161,7 @@ public class ImagePHash {
 	// Android
 	public Bitmap resize(Bitmap image, int width, int height) {
 		//Bitmap resizedImage = Bitmap.createBitmap(image, 0, 0, width, height);
-		Bitmap resizedImage = Bitmap.createScaledBitmap(image, 32, 32, false);
+		Bitmap resizedImage = Bitmap.createScaledBitmap(image, width, height, false);
 		//Graphics2D g = resizedImage.createGraphics();
 		//g.drawImage(image, 0, 0, width, height, null);
 		//g.dispose();
@@ -124,7 +169,7 @@ public class ImagePHash {
 	}
 	
 	// Android
-	private Bitmap toGrayscale(Bitmap img) {        
+	public Bitmap toGrayscale(Bitmap img) {        
 	    int width, height, pixel;
 	    int A, R, G, B;
 	    height = img.getHeight();

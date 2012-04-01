@@ -8,6 +8,7 @@ import java.net.URL;
 
 import android.app.Activity;
 import android.app.TabActivity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -51,6 +52,8 @@ public class MTGPricerActivity extends Activity {
 		}
 
         setContentView(new Preview(this, cardHashes));
+        //Card c = new Card(BitmapFactory.decodeFile("/sdcard/download/Image.jpg"));
+        //Log.d("Hash", c.getHash());
         
         /*
         

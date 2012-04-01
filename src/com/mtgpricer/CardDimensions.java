@@ -29,11 +29,11 @@ public class CardDimensions {
 	}
 	
 	public int leftOffset() {
-		return 225 + (int) Math.ceil((this.newFrame ? newLeftOffset : oldLeftOffset) * ratio);
+		return (int) Math.ceil((this.newFrame ? newLeftOffset : oldLeftOffset) * ratio);
 	}
 	
 	public int topOffset() {
-		return 50 + (int) Math.ceil((this.newFrame ? newTopOffset : oldTopOffset) * ratio);
+		return (int) Math.ceil((this.newFrame ? newTopOffset : oldTopOffset) * ratio);
 	}
 	
 	public int artWidth() {

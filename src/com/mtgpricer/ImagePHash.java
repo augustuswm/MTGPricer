@@ -53,10 +53,12 @@ public class ImagePHash {
 				for (int m = 0; m < 16; m++) {
 					for (int n = 0; n < 16; n++) {
 						//Log.d("Coords",Integer.toString(i * 4 + m) + "," + Integer.toString(j * 4 + n));
+						//Log.d("Colors",Integer.toString(img.getPixel(i * 8 + m, j * 8 + n)));
 						blockMean += img.getPixel(i * 8 + m, j * 8 + n);
 					}
 				}
 				
+				//Log.d("Means",Integer.toString(blockMean / blocks));
 				means[c++] = blockMean / blocks;
 			}
 		}

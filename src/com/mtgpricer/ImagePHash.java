@@ -37,8 +37,8 @@ public class ImagePHash {
 	}
 	
 	public String bmv_hash(Bitmap is) throws Exception {
-		int dims = 32;
-		int blocks = dims / 4 - 1;
+		int dims = 64;
+		int blocks = dims / 8 - 1;
 		int blockMean;
 		int[] means = new int[(int) Math.pow(blocks, 2)];
 		int c = 0;
@@ -50,10 +50,10 @@ public class ImagePHash {
 			for (int j = 0; j < blocks; j++) {
 				//Log.d("Cooords", Integer.toString(i) + "," + Integer.toString(j));
 				blockMean = 0;
-				for (int m = 0; m < 8; m++) {
-					for (int n = 0; n < 8; n++) {
+				for (int m = 0; m < 16; m++) {
+					for (int n = 0; n < 16; n++) {
 						//Log.d("Coords",Integer.toString(i * 4 + m) + "," + Integer.toString(j * 4 + n));
-						blockMean += img.getPixel(i * 4 + m, j * 4 + n);
+						blockMean += img.getPixel(i * 8 + m, j * 8 + n);
 					}
 				}
 				
@@ -65,7 +65,7 @@ public class ImagePHash {
 		
 		int[] sorted = Arrays.copyOf(means, dims);
 		Arrays.sort(sorted);
-		int median = sorted[(int) (sorted.length / 2)];
+		int median = sorted[(sorted.length / 2)];
 		
 		String result = "";
 		for (int i = 0; i < means.length; i++) {

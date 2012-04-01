@@ -1,37 +1,61 @@
 package com.mtgpricer;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.TabActivity;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TabHost;
-import android.widget.TextView;
+import android.view.Window;
 
-public class MTGPricerActivity extends TabActivity {
+public class MTGPricerActivity extends Activity {
+	
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	String[][] cardHashes = new String[6][2];
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mainmenu);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
+        try{
+			//InputStream img = new FileInputStream("Image.jpg");
+			
+			
+			// Open the file that is the first 
+			// command line parameter
+			FileInputStream fstream = new FileInputStream("/sdcard/download/cards_sub.txt");
+			// Get the object of DataInputStream
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			
+			int i = 0;
+			//Read File Line By Line
+			while ((strLine = br.readLine()) != null)   {
+				String[] a = strLine.split(":");
+				cardHashes[i][0] = a[0].trim();
+				cardHashes[i][1] = a[1].trim();
+				i++;
+			}
+			Log.d("MTGPricer", cardHashes[2][0].toString());
+			Log.d("MTGPricer", cardHashes[2][1].toString());
+			//Close the input stream
+			in.close();
+		} catch (Exception e){//Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		}
 
+        setContentView(new Preview(this, cardHashes));
+        
+        /*
+        
+        setContentView(R.layout.mainmenu);
+        
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
         TabHost.TabSpec spec;  // Resusable TabSpec for each tab
@@ -62,13 +86,15 @@ public class MTGPricerActivity extends TabActivity {
 
         tabHost.setCurrentTab(0);
         
-        /*String x = "101010110011000100010100010100111110010011001101000100100101001";
-        String y = "101010011011110100010010010100111110010011101100000100000000001";
-        String z = "111010010000100100010010010100110011010011101101100110000100001";
+        String x = "0001111001111100100111010011000001100000110000000";
+        String y = "0000111001111100101110110011000001100000110000011";
+        String z = "0111110001111100111110000001000000000000000000000";
         
         Log.d("Distance",Integer.toString(HammingDistance.distance(x,y)));
         Log.d("Distance",Integer.toString(HammingDistance.distance(x,z)));
-        Log.d("Distance",Integer.toString(HammingDistance.distance(y,z)));*/
+        Log.d("Distance",Integer.toString(HammingDistance.distance(y,z)));
+        
+        */
         
         /*
         //Get the text file

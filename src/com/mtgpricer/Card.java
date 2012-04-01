@@ -1,7 +1,6 @@
 package com.mtgpricer;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 public class Card {
 
@@ -13,7 +12,7 @@ public class Card {
 	public Card (Bitmap card) {
         
 		this.card = card;
-        dim = new CardDimensions(card, false);
+        dim = new CardDimensions(card, true);
         cardArt = Bitmap.createBitmap(card, dim.leftOffset(), dim.topOffset(), dim.artWidth(), dim.artHeight());
         hasher = new ImagePHash();
         
@@ -39,6 +38,10 @@ public class Card {
 	
 	public String getHash() {
 		return this.hash;
+	}
+	
+	public CardDimensions getDims() {
+		return this.dim;
 	}
     
     public String convertStreamToString(java.io.InputStream is) {

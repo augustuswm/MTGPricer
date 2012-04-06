@@ -32,8 +32,8 @@
 
                 <ImageView
                     android:id="@+id/cardImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:src="@drawable/ic_launcher" />
             </LinearLayout>

@@ -12,10 +12,10 @@ public class CardDimensions {
     private double ratio;
     
     // Card artwork for new frame
-    private double newTopOffset = 1.15125;
-    private double newLeftOffset = 0.57625;
-    private double newArtHeight = 3.81;
-    private double newArtWidth = 5.23875;
+    private double newTopOffset = 1.1075;
+    private double newLeftOffset = 0.59625;
+    private double newArtHeight = 4.1275;
+    private double newArtWidth = 5.63875;
     
     // Card artwork for old frame
     private double oldTopOffset = 0.9525;

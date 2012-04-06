@@ -53,12 +53,12 @@ public class Preview extends CameraPreview {
             String h = c.getHash();
             int bestHashIndex = 0, bestHashScore = 99;
         	
-        	Log.d("Distance", "-------------------------------------");
+        	//Log.d("Distance", "-------------------------------------");
             
             for (int i = 0; i < this.cardHashes.length; i++) {
             	int j = HammingDistance.distance(this.cardHashes[i][1], h);
             	
-            	Log.d("Distance", Integer.toString(j));
+            	//Log.d("Distance", this.cardHashes[i][0] + " " + Integer.toString(j));
             	
             	if (j < bestHashScore) {
             		bestHashScore = j;
@@ -71,7 +71,7 @@ public class Preview extends CameraPreview {
             //Log.d("Distance",Integer.toString(HammingDistance.distance("0000111001111100101110110011000001100000110000011",c.getHash())));
             
             Utils.matToBitmap(mRgba, bmp);
-            Log.i("MTGPricer", c.getHash());
+            //Log.i("MTGPricer", c.getHash());
             return bmp;
         }
 

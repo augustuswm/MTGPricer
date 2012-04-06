@@ -37,11 +37,12 @@ public class ImagePHash {
 	}
 	
 	public String bmv_hash(Bitmap is) throws Exception {
-		int dims = 64;
-		int blocks = dims / 8 - 1;
+		int dims = 32;
+		int blocks = dims / 4 - 1;
 		int blockMean;
 		int[] means = new int[(int) Math.pow(blocks, 2)];
 		int c = 0;
+		int pixel;
 		Bitmap img = is;
 		
 		img = toGrayscale(resize(img, dims, dims));
@@ -50,11 +51,13 @@ public class ImagePHash {
 			for (int j = 0; j < blocks; j++) {
 				//Log.d("Cooords", Integer.toString(i) + "," + Integer.toString(j));
 				blockMean = 0;
-				for (int m = 0; m < 16; m++) {
-					for (int n = 0; n < 16; n++) {
+				for (int m = 0; m < 8; m++) {
+					for (int n = 0; n < 8; n++) {
+						pixel = img.getPixel(i * 4 + m, j * 4 + n);
+						//Log.d("Colors", "Red: " + Integer.toString(Color.red(pixel)) + ", Green: " + Integer.toString(Color.green(pixel)) + ", Blue: " + Integer.toString(Color.blue(pixel)));
 						//Log.d("Coords",Integer.toString(i * 4 + m) + "," + Integer.toString(j * 4 + n));
 						//Log.d("Colors",Integer.toString(img.getPixel(i * 8 + m, j * 8 + n)));
-						blockMean += img.getPixel(i * 8 + m, j * 8 + n);
+						blockMean += img.getPixel(i * 4 + m, j * 4 + n);
 					}
 				}
 				
@@ -63,7 +66,7 @@ public class ImagePHash {
 			}
 		}
 		
-		Log.d("Hash", "Ran through image");
+		//Log.d("Hash", "Ran through image");
 		
 		int[] sorted = Arrays.copyOf(means, dims);
 		Arrays.sort(sorted);

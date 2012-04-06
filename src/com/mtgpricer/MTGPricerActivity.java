@@ -8,10 +8,12 @@ import java.net.URL;
 
 import android.app.Activity;
 import android.app.TabActivity;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
+import android.widget.ImageView;
 
 public class MTGPricerActivity extends Activity {
 	
@@ -19,7 +21,7 @@ public class MTGPricerActivity extends Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	String[][] cardHashes = new String[6][2];
+    	String[][] cardHashes = new String[233][2];
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         
@@ -29,7 +31,7 @@ public class MTGPricerActivity extends Activity {
 			
 			// Open the file that is the first 
 			// command line parameter
-			FileInputStream fstream = new FileInputStream("/sdcard/download/cards_sub.txt");
+			FileInputStream fstream = new FileInputStream("/sdcard/download/Shards_of_Alara_Hash.txt");
 			// Get the object of DataInputStream
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -43,18 +45,23 @@ public class MTGPricerActivity extends Activity {
 				cardHashes[i][1] = a[1].trim();
 				i++;
 			}
-			Log.d("MTGPricer", cardHashes[2][0].toString());
-			Log.d("MTGPricer", cardHashes[2][1].toString());
+
 			//Close the input stream
 			in.close();
+			
 		} catch (Exception e){//Catch exception if any
 			System.err.println("Error: " + e.getMessage());
 		}
 
         setContentView(new Preview(this, cardHashes));
-        //Card c = new Card(BitmapFactory.decodeFile("/sdcard/download/Image.jpg"));
-        //Log.d("Hash", c.getHash());
+        /*Card c = new Card(BitmapFactory.decodeFile("/sdcard/download/Image.jpg"));
+        Log.d("Hash", c.getHash());
+
+        setContentView(R.layout.main);
+
+        ImageView i = (ImageView) findViewById(R.id.cardImage);
         
+        i.setImageBitmap(c.getCardArt());*/
         /*
         
         setContentView(R.layout.mainmenu);
